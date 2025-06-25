@@ -1,0 +1,909 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Apple Music</title>
+  <link rel="icon" href="favicon-180.png" type="image/png" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" crossorigin="anonymous" />
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" />
+
+  <style>
+    /* CSS Reset */
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    :root {
+      --apple-pink: #fc3c44;
+      --apple-dark: #1a1a1a;
+      --apple-darker: #121212;
+      --apple-medium: #2a2a2a;
+      --apple-light-text: #f5f5f7;
+      --apple-muted-text: #86868b;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Text', 'SF Pro Icons', 'Helvetica Neue', sans-serif;
+      background-color: var(--apple-dark);
+      margin: 0;
+      padding: 0;
+      color: var(--apple-light-text);
+      overflow-x: hidden;
+    }
+
+    a {
+      text-decoration: none;
+      color: var(--apple-light-text);
+    }
+
+    .left-section {
+      width: 250px;
+      height: 100vh;
+      background-color: var(--apple-darker);
+      padding: 20px;
+      position: fixed;
+      overflow-y: auto;
+      z-index: 100;
+    }
+
+    .logo-container {
+      padding: 0 0 20px 0;
+    }
+
+    .logo-img {
+      width: 140px;
+      height: auto;
+    }
+
+    .right-section {
+      background-color: var(--apple-dark);
+      margin-left: 250px;
+      padding: 30px;
+      min-height: 100vh;
+    }
+
+    .search-input {
+      width: 100%;
+     font-size:1rem;
+      background-color:transparent;
+      border: none;
+      border-radius: 8px;
+      color: var(--apple-light-text);
+    }
+
+    .search-input::placeholder {
+      color: var(--apple-muted-text);
+    }
+
+    .search-input:focus {
+      outline: none;
+      background-color:var(--apple-medium);
+    }
+
+    .nav-section {
+      margin-bottom: 30px;
+    }
+
+    .nav-section h6 {
+      font-size: 15px;
+      color: var(--apple-muted-text);
+      margin-bottom: 10px;
+      font-weight: 600;
+    }
+    .nav-section h6:hover {
+      color: var(--apple-pink);
+      cursor: pointer;
+    }
+
+
+    .section-title {
+      font-size: 15px;
+      color: var(--apple-pink);
+      margin: 25px 0 15px 0;
+      font-weight: 600;
+    }
+
+
+    .section-title:hover {
+      cursor: pointer;
+    }
+    .nav-list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+
+    .nav-item {
+      margin-bottom: 15px;
+    }
+
+    .nav-link {
+      color: var(--apple-light-text);
+      font-size: 14px;
+      display: flex;
+      align-items: center;
+      padding: 5px 0;
+      transition: color 0.2s ease;
+    }
+
+    .nav-link:hover {
+      color: var(--apple-pink);
+      text-decoration: none;
+    }
+
+    .nav-link i {
+      margin-right: 10px;
+      width: 20px;
+      text-align: center;
+      color: var(--apple-pink);
+    }
+
+    .apple-music-link {
+      display: flex;
+      align-items: center;
+      margin-top: 40px;
+      font-size: 13px;
+    }
+
+    .apple-music-link i {
+      color: var(--apple-muted-text);
+      margin-right: 10px;
+    }
+
+    .apple-music-link a {
+      color: var(--apple-muted-text);
+    }
+
+    .page-title {
+      font-size: 32px;
+      font-weight: 600;
+      color: var(--apple-light-text);
+      margin-bottom: 20px;
+    }
+
+    .section-divider {
+      width: 100%;
+      height: 1px;
+      background-color: var(--apple-medium);
+      margin: 20px 0 30px 0;
+    }
+
+    .category-title {
+      font-size: 24px;
+      font-weight: 500;
+      color: var(--apple-light-text);
+      margin-bottom: 25px;
+    }
+
+    .album-card {
+      margin-bottom: 25px;
+      transition: transform 0.3s ease;
+    }
+
+    .album-card:hover {
+      transform: translateY(-5px);
+      cursor: pointer;
+    }
+
+    .album-img {
+      border-radius: 8px;
+      width: 100%;
+      box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+    }
+
+    .album-title {
+      font-size: 14px;
+      font-weight: 500;
+      color: var(--apple-light-text);
+      margin-top: 12px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .album-artist {
+      font-size: 12px;
+      color: var(--apple-muted-text);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .now-playing-bar {
+      position: fixed;
+      bottom: 0;
+      left: 250px;
+      right: 0;
+      height: 50px;
+      background-color: rgba(18, 18, 18, 0.95);
+      backdrop-filter: blur(20px);
+      display: flex;
+      align-items: center;
+      padding: 0 20px;
+      box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.2);
+      z-index: 90;
+    }
+
+    .now-playing-cover {
+      width: 50px;
+      height: 50px;
+      border-radius: 4px;
+      margin-right: 15px;
+    }
+
+    .now-playing-info {
+      flex: 1;
+    }
+
+    .now-playing-title {
+      font-size: 14px;
+      font-weight: 500;
+      margin: 0;
+    }
+
+    .now-playing-title:hover{
+      color: var(--apple-pink);
+      cursor: pointer;
+    }
+    .now-playing-artist {
+      font-size: 12px;
+      color: var(--apple-muted-text);
+      margin: 0;
+    }
+
+    .player-controls {
+      display: flex;
+      align-items: center;
+      margin-right: 20px;
+    }
+
+    .control-btn {
+      color: var(--apple-light-text);
+      font-size: 16px;
+      margin: 0 12px;
+      cursor: pointer;
+    }
+
+    .play-btn {
+      font-size: 24px;
+      color: var(--apple-light-text);
+    }
+    .play-btn:hover {
+      color: var(--apple-pink);
+      cursor: pointer;
+    }
+
+    .volume-control {
+      display: flex;
+      align-items: center;
+      width: 150px;
+    }
+
+    .volume-slider {
+      width: 100px;
+      margin-left: 10px;
+      height: 4px;
+      background-color: var(--apple-medium);
+      border-radius: 2px;
+      position: relative;
+    }
+
+    .volume-level {
+      position: absolute;
+      left: 0;
+      top: 0;
+      height: 100%;
+      width: 70%;
+      background-color: var(--apple-light-text);
+      border-radius: 2px;
+    }
+
+    .category-tabs {
+      display: flex;
+      margin-bottom: 25px;
+    }
+
+    .category-tab {
+      font-size: 14px;
+      color: var(--apple-muted-text);
+      margin-right: 25px;
+      padding-bottom: 8px;
+      cursor: pointer;
+      position: relative;
+      font-weight: 500;
+    }
+
+    .category-tab.active {
+      color: var(--apple-pink);
+    }
+
+    .category-tab.active::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      height: 2px;
+      background-color: var(--apple-pink);
+      border-radius: 1px;
+    }
+
+    @media (max-width: 992px) {
+      .left-section {
+        width: 200px;
+      }
+      .right-section {
+        margin-left: 200px;
+      }
+      .now-playing-bar {
+        left: 200px;
+      }
+    }
+
+    @media (max-width: 768px) {
+      .left-section {
+        width: 180px;
+      }
+      .right-section {
+        margin-left: 180px;
+        padding: 20px;
+      }
+      .now-playing-bar {
+        left: 180px;
+      }
+    }
+    .progress-container {
+      display: flex;
+      align-items: center;
+      width: 300px;
+      margin: 0 20px;
+    }
+
+    .current-time, .total-time {
+      font-size: 12px;
+      color: var(--apple-muted-text);
+      min-width: 40px;
+    }
+
+    .current-time {
+      text-align: right;
+      margin-right: 10px;
+    }
+
+    .total-time {
+      text-align: left;
+      margin-left: 10px;
+    }
+
+    .progress-bar {
+      flex: 1;
+      height: 4px;
+      background-color: var(--apple-medium);
+      border-radius: 2px;
+      position: relative;
+      cursor: pointer;
+    }
+    .search-container {
+      width: 160px;
+      height:41px;
+      gap:10px;
+      display: flex;
+      align-items: center;
+      margin-bottom: 25px;
+      background-color: var(--apple-medium);
+      border: none;
+      border-radius: 8px;
+      padding:10px 15px;
+    }
+    .search-container i {
+      color: var(--apple-muted-text);
+      
+    }
+    .progress-fill {
+      position: absolute;
+      left: 0;
+      top: 0;
+      height: 100%;
+      width: 0%;
+      background-color: var(--apple-pink);
+      border-radius: 2px;
+      transition: width 0.1s linear;
+    }
+    .right-section h3{
+      font-size: 24px;
+      font-weight: 500;
+      color: var(--apple-light-text);
+      margin-bottom: 25px;
+    }
+  </style>
+</head>
+<body>
+  <!-- Left Navigation -->
+  <section class="left-section">
+    <div class="logo-container">
+      <img src="Apple_Music_Logo-Photoroom-removebg-preview.png" alt="Apple Music Logo" class="logo-img" />
+    </div>
+
+    <div class="search-container">
+      <i class="fa-solid fa-search"></i>
+      <input type="search" placeholder="Search" class="search-input" />
+    </div>
+
+    <div class="nav-section">
+      <ul class="nav-list">
+        <li class="nav-item">
+          <a href="#" class="nav-link">
+            <i class="fa-solid fa-house"></i>
+            Home
+          </a>
+        </li>
+        <li class="nav-item">
+          <a href="#" class="nav-link">
+            <i class="fa-solid fa-bolt"></i>
+            Listen Now
+          </a>
+        </li>
+        <li class="nav-item">
+          <a href="#" class="nav-link">
+            <i class="fa-solid fa-compass"></i>
+            Browse
+          </a>
+        </li>
+        <li class="nav-item">
+          <a href="#" class="nav-link">
+            <i class="fa-solid fa-radio"></i>
+            Radio
+          </a>
+        </li>
+      </ul>
+    </div>
+
+    <h6 class="section-title">Library</h6>
+    <div class="nav-section">
+      <ul class="nav-list">
+        <li class="nav-item">
+          <a href="#" class="nav-link">
+            <i class="fa-solid fa-clock-rotate-left"></i>
+            Recently Added
+          </a>
+        </li>
+        <li class="nav-item">
+          <a href="#" class="nav-link">
+            <i class="fa-solid fa-microphone"></i>
+            Artists
+          </a>
+        </li>
+        <li class="nav-item">
+          <a href="#" class="nav-link">
+            <i class="fa-solid fa-compact-disc"></i>
+            Albums
+          </a>
+        </li>
+        <li class="nav-item">
+          <a href="#" class="nav-link">
+            <i class="fa-solid fa-music"></i>
+            Songs
+          </a>
+        </li>
+        <li class="nav-item">
+          <a href="#" class="nav-link">
+            <i class="fa-solid fa-user"></i>
+            Made for You
+          </a>
+        </li>
+      </ul>
+    </div>
+
+    <h6 class="section-title">Playlists</h6>
+    <div class="nav-section">
+      <ul class="nav-list">
+        <li class="nav-item">
+          <a href="#" class="nav-link">
+            <i class="fa-solid fa-list"></i>
+            Top 100
+          </a>
+        </li>
+        <li class="nav-item">
+          <a href="#" class="nav-link">
+            <i class="fa-solid fa-list"></i>
+            Chill
+          </a>
+        </li>
+        <li class="nav-item">
+          <a href="#" class="nav-link">
+            <i class="fa-solid fa-list"></i>
+            Workout
+          </a>
+        </li>
+        <li class="nav-item">
+          <a href="#" class="nav-link">
+            <i class="fa-solid fa-list"></i>
+            Party
+          </a>
+        </li>
+      </ul>
+    </div>
+
+    <div class="apple-music-link">
+      <i class="fa-brands fa-apple"></i>
+      <a href="#">Open in Apple Music</a>
+    </div>
+  </section>
+
+  <!-- Main Content -->
+  <section class="right-section">
+    <h1 class="page-title">Home</h1>
+    <div class="section-divider"></div>
+
+    <h3 class="category-title">Top Picks</h3>
+
+    <!-- Row 1 -->
+    <div class="row">
+      <div class="col-12 col-sm-6 col-md-3">
+        <div class="album-card">
+          <img src="images/anime_photo.png" alt="Album Cover" class="album-img" />
+          <div class="album-title">ファンタジーバトルアニメファン - EP</div>
+          <div class="album-artist">Lyn</div>
+        </div>
+      </div>
+      <div class="col-12 col-sm-6 col-md-3">
+        <div class="album-card">
+          <img src="/images/Persona 3.png" alt="Album Cover" class="album-img" />
+          <div class="album-title">Battle Hymn of the Soul</div>
+          <div class="album-artist">Atlus Sound Team</div>
+        </div>
+        <audio class="Persona_3_OST" src="Persona 3 OST - Battle Hymn of the Soul.mp3"></audio>
+      </div>
+      <div class="col-12 col-sm-6 col-md-3">
+        <div class="album-card">
+          <img src="/images/yildizlarinAltinda.png" alt="Album Cover" class="album-img" />
+          <div class="album-title">Yıldızların Altında</div>
+          <div class="album-artist">Kargo</div>
+        </div>
+      </div>
+      <div class="col-12 col-sm-6 col-md-3">
+        <div class="album-card">
+          <img src="/images/From_The_Inside.png" alt="Album Cover" class="album-img" />
+          <div class="album-title">From the Inside</div>
+          <div class="album-artist">Linkin Park</div>
+        </div>
+        <audio class="From_The_Inside" src="From The Inside (Official Music Video) [4K UPGRADE] – Linkin Park.mp3"></audio>
+      </div>
+    </div>
+    <br>
+    
+    <!-- Row 2 -->
+     <h3>Just For You</h3>
+    <div class="row">
+      <div class="col-12 col-sm-6 col-md-3">
+        <div class="album-card">
+          <img src="/images/P5R.png" alt="Album Cover" class="album-img" />
+          <div class="album-title">Persona 5 Royal Soundtrack</div>
+          <div class="album-artist">Lyn</div>
+        </div>
+        <audio class="Persona_5_Royal" src="Throw Away Your Mask.mp3" controls style="display: none;"></audio>
+      </div>
+      <div class="col-12 col-sm-6 col-md-3">
+        <div class="album-card">
+          <img src="/images/Photo.png" alt="Album Cover" class="album-img" />
+          <div class="album-title">Heavy Rotation mix</div>
+          <div class="album-artist">Lyn, Linkin Park, maNga, Kargo</div>
+        </div>
+      </div>
+      <div class="col-12 col-sm-6 col-md-3">
+        <div class="album-card">
+          <img src="/images/birKAdin_Cizeceksin_2.webp" alt="Album Cover" class="album-img" />
+          <div class="album-title">maNga+</div>
+          <div class="album-artist">maNga+</div>
+        </div>
+      </div>
+      <div class="col-12 col-sm-6 col-md-3">
+        <div class="album-card">
+          <img src="/images/undertale.webp" alt="Album Cover" class="album-img" />
+          <div class="album-title">UnderTale Soundtrack</div>
+          <div class="album-artist">Toby Fox</div>
+        </div>
+      </div>
+    </div>
+    <br>
+    <!-- Row 3 -->
+     <h3>Recently Played</h3>
+    <div class="row">
+      <div class="col-12 col-sm-6 col-md-3">
+        <div class="album-card">
+          <img src="/images/mutter.webp" alt="Album Cover" class="album-img" />
+          <div class="album-title">Mutter</div>
+          <div class="album-artist">Rammstein</div>
+        </div>
+      </div>
+      <audio src="Mutter.mp3" class="mutter"></audio>
+      <div class="col-12 col-sm-6 col-md-3">
+        <div class="album-card">
+          <img src="images/WhatI'veDone.webp" alt="What I've Done Album Cover" class="album-img" />
+          <div class="album-title">What I've Done</div>
+          <div class="album-artist">Linkin Park</div>
+        </div>
+      </div>
+      <div class="col-12 col-sm-6 col-md-3">
+        <div class="album-card">
+          <img src="/images/DumanII.webp" alt="Album Cover" class="album-img" />
+          <div class="album-title">Senden Daha Güzel</div>
+          <div class="album-artist">Duman</div>
+        </div>
+      </div>
+      <div class="col-12 col-sm-6 col-md-3">
+        <div class="album-card">
+          <img src="/images/HeroesTonight.webp" alt="Album Cover" class="album-img" />
+          <div class="album-title">Heroes Tonight</div>
+          <div class="album-artist">Janji, Johnning</div>
+        </div>
+      </div>
+      <audio class="audioHeroes" src="Janji - Heroes Tonight (feat. Johnning) - Progressive House - NCS - Copyright Free Music.mp3"></audio>
+    </div>
+  </section>
+
+  <!-- Now Playing Bar -->
+  <div class="now-playing-bar">
+    <img src="images/blindingLights.webp" alt="Now Playing" class="now-playing-cover" />
+    <div class="now-playing-info">
+      <p class="now-playing-title">Blinding Lights</p>
+      <p class="now-playing-artist">The Weeknd</p>
+    </div>
+    <div class="player-controls">
+      <i class="fa-solid fa-backward-step control-btn"></i>
+      <i class="fa-solid fa-circle-play play-btn"></i>
+      <audio class="music" src="The Weeknd - Blinding Lights (Official Audio).mp3" controls style="display: none;"></audio>
+      <i class="fa-solid fa-forward-step control-btn"></i>
+    </div>
+    <div class="progress-container">
+      <span class="current-time">0:00</span>
+      <div class="progress-bar">
+        <div class="progress-fill"></div>
+      </div>
+      <span class="total-time">0:00</span>
+    </div>      
+    <div class="volume-control">
+      <i class="fa-solid fa-volume-high"></i>
+      <div class="volume-slider">
+        <div class="volume-level"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Scripts - Properly ordered -->
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+  
+  <script>  
+$(document).ready(function () {
+  // Get all audio elements and main control elements
+  const audioFromInside = $('.From_The_Inside')[0];
+  const audioPersona_3 = $('.Persona_3_OST')[0];
+  const audioMutter = $('.mutter')[0];
+  const SearchInput = $('.search-input');
+  const audioBlinding = $('.music')[0];
+  const audioPersona = $('.Persona_5_Royal')[0];
+  const audioHeroes = $('.audioHeroes')[0];
+  const playBtn = $('.play-btn');
+  const progressFill = $('.progress-fill');
+  const progressBar = $('.progress-bar');
+  const currentTime = $('.current-time');
+  const totalTime = $('.total-time');
+  const nowPlayingCover = $('.now-playing-cover');
+  const nowPlayingTitle = $('.now-playing-title');
+  const nowPlayingArtist = $('.now-playing-artist');
+
+  // Track which audio is currently active
+  let currentAudio = audioBlinding;
+  let isUpdatingProgress = false;
+
+  // Format time in minutes:seconds
+  function formatTime(seconds) {
+    if (isNaN(seconds)) return '0:00';
+    const minutes = Math.floor(seconds / 60);
+    const remainingSeconds = Math.floor(seconds % 60);
+    return `${minutes}:${remainingSeconds < 10 ? '0' : ''}${remainingSeconds}`;
+  }
+
+  // Function to update player UI for the current song
+  function updatePlayerUI(audio, title, artist, coverSrc) {
+    // Pause any currently playing audio
+    audioBlinding.pause();
+    audioPersona.pause();
+    audioHeroes.pause();
+    audioMutter.pause();
+    audioPersona_3.pause();
+
+    // Set new current audio
+    currentAudio = audio;
+
+    // Update the player information
+    nowPlayingTitle.text(title);
+    nowPlayingArtist.text(artist);
+    nowPlayingCover.attr('src', coverSrc);
+
+    // Reset progress
+    progressFill.css('width', '0%');
+    currentTime.text('0:00');
+
+    // Update duration if metadata is loaded
+    if (audio.readyState >= 1) {
+      totalTime.text(formatTime(audio.duration));
+    }
+
+    // Set volume for new audio
+    audio.volume = currentAudio.volume || 0.7;
+
+    // Play the new audio
+    audio.play();
+    playBtn.removeClass('fa-circle-play').addClass('fa-circle-pause');
+    
+    // Start progress updates
+    startProgressUpdate();
+  }
+
+  // Progress update function - FIXED VERSION
+  function updateProgress() {
+    if (currentAudio && !currentAudio.paused && !isNaN(currentAudio.duration) && currentAudio.duration > 0) {
+      const percent = (currentAudio.currentTime / currentAudio.duration) * 100;
+      progressFill.css('width', `${percent}%`);
+      currentTime.text(formatTime(currentAudio.currentTime));
+    }
+  }
+
+  // Start progress update loop
+  function startProgressUpdate() {
+    // Clear any existing interval
+    if (window.progressInterval) {
+      clearInterval(window.progressInterval);
+    }
+    
+    // Update progress every 100ms for smooth animation
+    window.progressInterval = setInterval(updateProgress, 100);
+  }
+
+  // Play/Pause button click event for the current audio
+  playBtn.click(function () {
+    if (currentAudio.paused) {
+      currentAudio.play();
+      playBtn.removeClass('fa-circle-play').addClass('fa-circle-pause');
+      startProgressUpdate();
+    } else {
+      currentAudio.pause();
+      playBtn.removeClass('fa-circle-pause').addClass('fa-circle-play');
+      if (window.progressInterval) {
+        clearInterval(window.progressInterval);
+      }
+    }
+  });
+
+  // Search functionality
+  $(".search-input").on("input", function() {
+    const searchTerm = $(this).val().toLowerCase();
+    $(".album-card").each(function() {
+      const title = $(this).find(".album-title").text().toLowerCase();
+      const artist = $(this).find(".album-artist").text().toLowerCase();
+      if (title.includes(searchTerm) || artist.includes(searchTerm)) {
+        $(this).show();
+      } else {
+        $(this).hide();
+      }
+    });
+  });
+
+  // Album card click events
+  $('.album-card').click(function() {
+    const albumTitle = $(this).find('.album-title').text();
+    const albumArtist = $(this).find('.album-artist').text();
+    const albumCover = $(this).find('.album-img').attr('src');
+
+    if (albumTitle === "Persona 5 Royal Soundtrack") {
+      updatePlayerUI(audioPersona, "Throw Away Your Mask", "Lyn", "images/P5R.png");
+    } else if (albumTitle === "Heroes Tonight") {
+      updatePlayerUI(audioHeroes, "Heroes Tonight", "Janji, Johnning", "images/HeroesTonight.webp");
+    }
+    else if (albumTitle === "From the Inside") {
+      updatePlayerUI(audioFromInside, "From the Inside", "Linkin Park", "images/From_The_Inside.png");
+    }
+    else if (albumTitle === "Mutter") {
+      updatePlayerUI(audioMutter, "Mutter", "Rammstein", "images/mutter.webp");
+    } else if (albumTitle === "Persona 3 Soundtrack") {
+      updatePlayerUI(audioPersona_3, "Battle Hymn of the Soul", "Atlus Sound Team", "images/Persona 3.png");
+    } else if (albumTitle === "What I've Done") {
+      updatePlayerUI(audioBlinding, "What I've Done", "Linkin Park", "images/WhatI'veDone.webp");
+    } else if (albumTitle === "Senden Daha Güzel") {
+      updatePlayerUI(audioBlinding, "Senden Daha Güzel", "Duman", "images/DumanII.webp");
+    } else if (albumTitle === "UnderTale Soundtrack") {
+      updatePlayerUI(audioBlinding, "UnderTale Soundtrack", "Toby Fox", "images/undertale.webp");
+    } else if (albumTitle === "Yıldızların Altında") {
+      updatePlayerUI(audioBlinding, "Yıldızların Altında", "Kargo", "images/yildizlarinAltinda.png");
+    } else if (albumTitle === "maNga+") {
+      updatePlayerUI(audioBlinding, "maNga+", "maNga+", "images/birKAdin_Cizeceksin_2.webp");
+    } else if (albumTitle === "ファンタジーバトルアニメファン - EP") {
+      updatePlayerUI(audioBlinding, "ファンタジーバトルアニメファン - EP", "Lyn", "images/anime_photo.png");
+    } else if (albumTitle === "From the Inside") {
+      updatePlayerUI(audioBlinding, "From the Inside", "Linkin Park", "images/From_The_Inside.png");
+    }
+  });
+  // FIXED Volume control
+  const volumeSlider = $('.volume-slider');
+  const volumeLevel = $('.volume-level');
+
+  // Set initial volume for all audio elements
+  const initialVolume = 0.7;
+  [audioBlinding, audioPersona, audioHeroes, audioMutter, audioPersona_3].forEach(audio => {
+    if (audio) audio.volume = initialVolume;
+  });
+  volumeLevel.css('width', '70%');
+
+  // Click handler for volume control - FIXED
+  volumeSlider.click(function(e) {
+    e.preventDefault();
+    const sliderRect = this.getBoundingClientRect();
+    const sliderWidth = sliderRect.width;
+    const clickPosition = e.clientX - sliderRect.left;
+    const newVolume = Math.max(0, Math.min(1, clickPosition / sliderWidth));
+
+    // Update volume for all audio elements
+    [audioBlinding, audioPersona, audioHeroes, audioMutter, audioPersona_3].forEach(audio => {
+      if (audio) audio.volume = newVolume;
+    });
+    
+    volumeLevel.css('width', `${newVolume * 100}%`);
+  });
+
+  // Allow clicking on progress bar to seek - IMPROVED
+  progressBar.click(function(e) {
+    if (currentAudio && !isNaN(currentAudio.duration)) {
+      const progressRect = this.getBoundingClientRect();
+      const progressWidth = progressRect.width;
+      const clickPosition = e.clientX - progressRect.left;
+      const clickPercent = clickPosition / progressWidth;
+      const seekTime = currentAudio.duration * clickPercent;
+
+      currentAudio.currentTime = seekTime;
+    }
+  });
+
+  // Event listeners for when metadata is loaded
+  function setupMetadataListener(audio) {
+    audio.addEventListener('loadedmetadata', function() {
+      if (currentAudio === audio) {
+        totalTime.text(formatTime(audio.duration));
+      }
+    });
+
+    audio.addEventListener('ended', function() {
+      if (currentAudio === audio) {
+        playBtn.removeClass('fa-circle-pause').addClass('fa-circle-play');
+        progressFill.css('width', '0%');
+        currentTime.text('0:00');
+        if (window.progressInterval) {
+          clearInterval(window.progressInterval);
+        }
+      }
+    });
+
+    audio.addEventListener('error', function() {
+      console.error(`Error loading audio file for ${audio.className}`);
+    });
+  }
+
+  // Setup listeners for all audio elements
+  [audioBlinding, audioPersona, audioHeroes, audioMutter, audioPersona_3,audioFromInside].forEach(audio => {
+    if (audio) setupMetadataListener(audio);
+  });
+
+  // Initialize the first song
+  if (audioBlinding) {
+    totalTime.text(formatTime(audioBlinding.duration || 0));
+    startProgressUpdate();
+  }
+});
+  </script>
+</body>
+</html>
